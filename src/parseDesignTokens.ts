@@ -43,6 +43,10 @@ export function resolveAlias(
     ) as DesignTokenTree;
     const formatted = Object.values(result)[0];
 
+    if (options.flattenAliases && '$value' in formatted) {
+      return formatted.$value;
+    }
+
     return {
       ...formatted,
       ...(options?.publishMetadata
@@ -120,18 +124,21 @@ function resolveArrayValue(
 
 export type ParseDesignTokensOptions<
   RA extends boolean = boolean,
-  PM extends boolean = boolean
+  PM extends boolean = boolean,
+  FA extends boolean = boolean
 > = {
   resolveAliases?: RA;
   publishMetadata?: PM;
+  flattenAliases?: FA;
 };
 
 export function parseDesignTokens<
   RA extends boolean = false,
-  PM extends boolean = false
+  PM extends boolean = false,
+  FA extends boolean = false
 >(
   tokens: DesignTokenTree,
-  options?: ParseDesignTokensOptions<RA, PM>,
+  options?: ParseDesignTokensOptions<RA, PM, FA>,
   parent?: DesignTokenTree,
   context?: DesignTokenTree,
   path: Array<string> = []
