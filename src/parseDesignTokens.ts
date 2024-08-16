@@ -125,17 +125,20 @@ function resolveArrayValue(
 export type ParseDesignTokensOptions<
   RA extends boolean = boolean,
   PM extends boolean = boolean,
-  FA extends boolean = boolean
+  FA extends boolean = boolean,
+  SV extends boolean = boolean
 > = {
   resolveAliases?: RA;
   publishMetadata?: PM;
   flattenAliases?: FA;
+  skipValidation?: SV;
 };
 
 export function parseDesignTokens<
   RA extends boolean = false,
   PM extends boolean = false,
-  FA extends boolean = false
+  FA extends boolean = false,
+  SV extends boolean = false
 >(
   tokens: DesignTokenTree,
   options?: ParseDesignTokensOptions<RA, PM, FA>,
@@ -207,7 +210,10 @@ export function parseDesignTokens<
       if (maybeType === undefined) {
         maybeType = inferJSONValueType($value);
       }
-      validateDesignTokenValue(maybeType, $value);
+      
+      if (!options?.skipValidation) {
+        validateDesignTokenValue(maybeType, $value);
+      }
 
       return {
         ...acc,
