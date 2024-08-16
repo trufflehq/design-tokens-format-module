@@ -57,6 +57,8 @@ export function resolveAlias(
           }
         : {}),
     };
+  } else if (options?.skipValidation) {
+    return rawAlias;
   } else {
     throw new Error(
       `Alias "${alias}" not found in context: ${JSON.stringify(
